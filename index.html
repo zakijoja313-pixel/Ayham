@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أبهم ضد الطاولة 💥</title>
+<style>
+:root{--bg:#101322;--panel:#1b2035;--text:#f5f7ff;--muted:#aab2d0;--hot:#ffb000;--red:#ff4e70;--cyan:#5ce1e6}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#292447 0,#101322 58%);color:var(--text);font-family:Tahoma,Arial,sans-serif;min-height:100vh;display:grid;place-items:center;padding:18px}
+.app{width:min(760px,100%);background:#171b2c;border:1px solid #373c5a;border-radius:25px;overflow:hidden;box-shadow:0 24px 80px #0007}
+header{padding:24px;text-align:center;background:linear-gradient(120deg,#29234a,#182b42)}
+h1{margin:0 0 8px;font-size:clamp(26px,5vw,40px)}header p{color:#c6cbe0;margin:0}
+.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;padding:16px}
+.pill{background:#252a41;border:1px solid #3b4262;border-radius:14px;padding:10px 15px;color:var(--muted)}
+.pill b{color:var(--hot)}
+.arena{margin:0 18px;background:linear-gradient(#222842,#181c2e);border:1px solid #353c5c;border-radius:20px;min-height:300px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.tag{position:absolute;top:14px;right:16px;color:var(--muted);font-size:13px}
+.person{font-size:72px;transition:transform .18s;filter:drop-shadow(0 8px 10px #0005)}
+.person.hit{transform:translateY(12px) rotate(-12deg) scale(1.12)}
+.table{position:relative;margin-top:14px;width:210px;height:90px;transition:transform .3s}
+.top{height:24px;border-radius:8px;background:linear-gradient(#c88b50,#8c512d);border:3px solid #f1bd7d;position:relative;z-index:2}
+.leg{position:absolute;top:20px;width:18px;height:67px;background:linear-gradient(90deg,#754126,#b77643);border-radius:0 0 5px 5px}
+.leg.left{left:22px}.leg.right{right:22px}
+.table.broken{transform:rotate(8deg) translateY(12px)}
+.table.broken .top{transform:rotate(-8deg);background:#7b4433}
+.table.broken .leg.left{transform:rotate(28deg) translate(-13px,10px)}
+.table.broken .leg.right{transform:rotate(-35deg) translate(15px,8px)}
+.splinter{display:none;position:absolute;width:24px;height:7px;background:#d89a5e;border-radius:3px}
+.broken~.splinter{display:block}
+#message{min-height:30px;text-align:center;padding:14px 10px;color:var(--cyan);font-weight:bold}
+.controls{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;padding:0 18px 20px}
+button{font:inherit;font-weight:bold;border:0;border-radius:14px;padding:14px 20px;cursor:pointer;transition:transform .12s,filter .12s}
+button:active{transform:scale(.96)}
+#hit{background:linear-gradient(120deg,#ffcb3d,#ff7b38);color:#251708;box-shadow:0 6px 20px #ff8d3630}
+#reset{background:#2b3150;color:#f5f7ff;border:1px solid #444c70}
+footer{text-align:center;color:#838cab;font-size:12px;padding:0 12px 18px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.arena.shake{animation:shake .22s}
+</style>
+</head>
+<body>
+<main class="app">
+<header><h1>💥 أبهم ضد الطاولة</h1><p>اضغط الزر وخلي أبهم يضرب الطاولة… بتتحمّل ولا بتنكسّر؟</p></header>
+<section class="stats">
+<div class="pill">القوة: <b id="power">0</b></div>
+<div class="pill">حالة الطاولة: <b id="condition">سليمة 🪵</b></div>
+<div class="pill">الضربات: <b id="count">0</b></div>
+</section>
+<section class="arena" id="arena">
+<span class="tag">🏆 تحدّي التحطيم</span>
+<div class="person" id="person">🧍</div>
+<div class="table" id="table"><div class="top"></div><div class="leg left"></div><div class="leg right"></div></div>
+<div class="splinter" style="top:68%;left:24%"></div><div class="splinter" style="top:72%;right:23%;transform:rotate(35deg)"></div>
+<div id="message">جاهز يا أبهم؟ ورجّينا القوة! 😎</div>
+</section>
+<div class="controls">
+<button id="hit">👊 اضرب الطاولة!</button>
+<button id="reset">🔄 إعادة التحدي</button>
+</div>
+<footer>لعبة خيالية بسيطة — لا تجرّب تكسير الأثاث الحقيقي 😅</footer>
+</main>
+<script>
+const hit=document.getElementById('hit'), reset=document.getElementById('reset');
+const table=document.getElementById('table'), person=document.getElementById('person');
+const arena=document.getElementById('arena'), powerEl=document.getElementById('power');
+const condition=document.getElementById('condition'), countEl=document.getElementById('count'), message=document.getElementById('message');
+let power=0,count=0,broken=false;
+hit.addEventListener('click',()=>{
+ if(broken){message.textContent='الطاولة انكسرت خلاص يا وحش! اضغط إعادة التحدي 🔄';return}
+ count++;power+=25;powerEl.textContent=power;countEl.textContent=count;
+ person.classList.remove('hit');void person.offsetWidth;person.classList.add('hit');
+ arena.classList.remove('shake');void arena.offsetWidth;arena.classList.add('shake');
+ if(count>=4){broken=true;table.classList.add('broken');condition.textContent='مكسورة 💔';person.textContent='💪';message.textContent='بووووم! أبهم كسّر الطاولة! 🔥🏆';hit.textContent='💥 انكسرت!';}
+ else if(count===3){condition.textContent='تشقّقت 😵';message.textContent='الطاولة عم تتشقّق… ضربة كمان ويمكن تروح!';}
+ else if(count===2){condition.textContent='متضرّرة 😬';message.textContent='يا ساتر! الطاولة بلّشت تتأثر!';}
+ else{condition.textContent='اهتزّت 😳';message.textContent='أول ضربة! جرّب اضرب كمان يا أبهم!';}
+ setTimeout(()=>person.classList.remove('hit'),220);
+});
+reset.addEventListener('click',()=>{power=0;count=0;broken=false;powerEl.textContent='0';countEl.textContent='0';condition.textContent='سليمة 🪵';table.classList.remove('broken');person.textContent='🧍';message.textContent='جاهز يا أبهم؟ ورجّينا القوة! 😎';hit.textContent='👊 اضرب الطاولة!';});
+</script>
+</body>
+</html>
